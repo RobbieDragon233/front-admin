@@ -21,12 +21,12 @@ export default {
   data() {
     return {
       tabMapOptions: [
-        { label: '温敏传感器', key: 'WM' },
-        { label: '光敏传感器', key: 'GM' },
-        { label: '压敏传感器', key: 'YM' },
-        { label: '气敏传感器', key: 'QM' }
+        { label: 'China', key: 'CN' },
+        { label: 'USA', key: 'US' },
+        { label: 'Japan', key: 'JP' },
+        { label: 'Eurozone', key: 'EU' }
       ],
-      activeName: 'GM',
+      activeName: 'CN',
       createdTimes: 0
     }
   },

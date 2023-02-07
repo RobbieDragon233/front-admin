@@ -78,47 +78,21 @@ export const constantRoutes = [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        name: '首页',
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   },
   {
-    path: '/documentation',
+    // 文档
+    path: '/document',
     component: Layout,
     children: [
       {
         path: 'index',
         component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'Guide', icon: 'guide', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        name: '文档',
+        meta: { title: '文档', icon: 'documentation', affix: true }
       }
     ]
   }
@@ -134,9 +108,9 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/permission/page',
     alwaysShow: true, // will always show the root menu
-    name: 'Permission',
+    name: '数据管理',
     meta: {
-      title: 'Permission',
+      title: '数据管理',
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
@@ -144,27 +118,27 @@ export const asyncRoutes = [
       {
         path: 'page',
         component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
+        name: '实时数据',
         meta: {
-          title: 'Page Permission',
+          title: '实时数据',
           roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
         path: 'directive',
         component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
+        name: '历史数据',
         meta: {
-          title: 'Directive Permission'
+          title: '历史数据'
           // if do not set roles, means: this page does not require permission
         }
       },
       {
         path: 'role',
         component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
+        name: '数据查询',
         meta: {
-          title: 'Role Permission',
+          title: '数据查询',
           roles: ['admin']
         }
       }
@@ -178,8 +152,8 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: { title: 'Icons', icon: 'icon', noCache: true }
+        name: '设备管理',
+        meta: { title: '设备管理', icon: 'icon', noCache: true }
       }
     ]
   },
@@ -196,7 +170,7 @@ export const asyncRoutes = [
     redirect: '/example/list',
     name: 'Example',
     meta: {
-      title: 'Example',
+      title: '数据告警规则',
       icon: 'el-icon-s-help'
     },
     children: [
@@ -204,20 +178,13 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/example/create'),
         name: 'CreateArticle',
-        meta: { title: 'Create Article', icon: 'edit' }
+        meta: { title: '触发规则', icon: 'edit' }
       },
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/example/edit'),
         name: 'EditArticle',
-        meta: { title: 'Edit Article', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: 'ArticleList',
-        meta: { title: 'Article List', icon: 'list' }
+        meta: { title: '触发事件' }
       }
     ]
   },
@@ -225,12 +192,25 @@ export const asyncRoutes = [
   {
     path: '/tab',
     component: Layout,
+    redirect: '/tab/list',
+    name: 'Tab',
+    meta: {
+      title: '定时任务',
+      icon: 'list'
+    },
     children: [
       {
         path: 'index',
-        component: () => import('@/views/tab/index'),
+        component: () => import('@/views/tab/list'),
         name: 'Tab',
-        meta: { title: 'Tab', icon: 'tab' }
+        meta: { title: '定时任务', icon: 'tab' }
+      },
+      {
+        // todo
+        path: '',
+        component: () => import('@/views/tab/scheduled'),
+        name: 'ScheduledTask',
+        meta: { title: '任务日志' }
       }
     ]
   },
@@ -241,144 +221,15 @@ export const asyncRoutes = [
     redirect: 'noRedirect',
     name: 'ErrorPages',
     meta: {
-      title: 'Error Pages',
-      icon: '404'
+      title: '用户信息',
+      icon: 'user'
     },
     children: [
       {
         path: '401',
         component: () => import('@/views/error-page/401'),
-        name: 'Page401',
-        meta: { title: '401', noCache: true }
-      },
-      {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
-        name: 'Page404',
-        meta: { title: '404', noCache: true }
-      }
-    ]
-  },
-
-  {
-    path: '/error-log',
-    component: Layout,
-    children: [
-      {
-        path: 'log',
-        component: () => import('@/views/error-log/index'),
-        name: 'ErrorLog',
-        meta: { title: 'Error Log', icon: 'bug' }
-      }
-    ]
-  },
-
-  {
-    path: '/excel',
-    component: Layout,
-    redirect: '/excel/export-excel',
-    name: 'Excel',
-    meta: {
-      title: 'Excel',
-      icon: 'excel'
-    },
-    children: [
-      {
-        path: 'export-excel',
-        component: () => import('@/views/excel/export-excel'),
-        name: 'ExportExcel',
-        meta: { title: 'Export Excel' }
-      },
-      {
-        path: 'export-selected-excel',
-        component: () => import('@/views/excel/select-excel'),
-        name: 'SelectExcel',
-        meta: { title: 'Export Selected' }
-      },
-      {
-        path: 'export-merge-header',
-        component: () => import('@/views/excel/merge-header'),
-        name: 'MergeHeader',
-        meta: { title: 'Merge Header' }
-      },
-      {
-        path: 'upload-excel',
-        component: () => import('@/views/excel/upload-excel'),
-        name: 'UploadExcel',
-        meta: { title: 'Upload Excel' }
-      }
-    ]
-  },
-
-  {
-    path: '/zip',
-    component: Layout,
-    redirect: '/zip/download',
-    alwaysShow: true,
-    name: 'Zip',
-    meta: { title: 'Zip', icon: 'zip' },
-    children: [
-      {
-        path: 'download',
-        component: () => import('@/views/zip/index'),
-        name: 'ExportZip',
-        meta: { title: 'Export Zip' }
-      }
-    ]
-  },
-
-  {
-    path: '/pdf',
-    component: Layout,
-    redirect: '/pdf/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/pdf/index'),
-        name: 'PDF',
-        meta: { title: 'PDF', icon: 'pdf' }
-      }
-    ]
-  },
-  {
-    path: '/pdf/download',
-    component: () => import('@/views/pdf/download'),
-    hidden: true
-  },
-
-  {
-    path: '/theme',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/theme/index'),
-        name: 'Theme',
-        meta: { title: 'Theme', icon: 'theme' }
-      }
-    ]
-  },
-
-  {
-    path: '/clipboard',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/clipboard/index'),
-        name: 'ClipboardDemo',
-        meta: { title: 'Clipboard', icon: 'clipboard' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://github.com/PanJiaChen/vue-element-admin',
-        meta: { title: 'External Link', icon: 'link' }
+        name: '用户信息',
+        meta: { title: '用户信息', noCache: true }
       }
     ]
   },

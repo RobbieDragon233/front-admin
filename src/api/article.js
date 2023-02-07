@@ -8,6 +8,22 @@ export function fetchList(query) {
   })
 }
 
+export function fetchDeviceList(query) {
+  return request({
+    url: '/vue-element-admin/article/devicelist',
+    method: 'get',
+    params: query
+  })
+}
+
+export function fetchWarnList(query) {
+  return request({
+    url: '/vue-element-admin/article/warnlist',
+    method: 'get',
+    params: query
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',

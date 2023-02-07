@@ -1,111 +1,57 @@
 <template>
-  <div class="app-container">
-    <switch-roles @change="handleRolesChange" />
-    <div :key="key" style="margin-top:30px;">
-      <div>
-        <span v-permission="['admin']" class="permission-alert">
-          Only
-          <el-tag class="permission-tag" size="small">admin</el-tag> can see this
-        </span>
-        <el-tag v-permission="['admin']" class="permission-sourceCode" type="info">
-          v-permission="['admin']"
-        </el-tag>
-      </div>
-
-      <div>
-        <span v-permission="['editor']" class="permission-alert">
-          Only
-          <el-tag class="permission-tag" size="small">editor</el-tag> can see this
-        </span>
-        <el-tag v-permission="['editor']" class="permission-sourceCode" type="info">
-          v-permission="['editor']"
-        </el-tag>
-      </div>
-
-      <div>
-        <span v-permission="['admin','editor']" class="permission-alert">
-          Both
-          <el-tag class="permission-tag" size="small">admin</el-tag> and
-          <el-tag class="permission-tag" size="small">editor</el-tag> can see this
-        </span>
-        <el-tag v-permission="['admin','editor']" class="permission-sourceCode" type="info">
-          v-permission="['admin','editor']"
-        </el-tag>
-      </div>
-    </div>
-
-    <div :key="'checkPermission'+key" style="margin-top:60px;">
-      <aside>
-        In some cases, using v-permission will have no effect. For example: Element-UI's Tab component or el-table-column and other scenes that dynamically render dom. You can only do this with v-if.
-        <br> e.g.
-      </aside>
-
-      <el-tabs type="border-card" style="width:550px;">
-        <el-tab-pane v-if="checkPermission(['admin'])" label="Admin">
-          Admin can see this
-          <el-tag class="permission-sourceCode" type="info">
-            v-if="checkPermission(['admin'])"
-          </el-tag>
-        </el-tab-pane>
-
-        <el-tab-pane v-if="checkPermission(['editor'])" label="Editor">
-          Editor can see this
-          <el-tag class="permission-sourceCode" type="info">
-            v-if="checkPermission(['editor'])"
-          </el-tag>
-        </el-tab-pane>
-
-        <el-tab-pane v-if="checkPermission(['admin','editor'])" label="Admin-OR-Editor">
-          Both admin or editor can see this
-          <el-tag class="permission-sourceCode" type="info">
-            v-if="checkPermission(['admin','editor'])"
-          </el-tag>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+  <div class="tab-container">
+    <el-tag>mounted times ：{{ createdTimes }}</el-tag>
+    <el-alert :closable="false" style="width:200px;display:inline-block;vertical-align: middle;margin-left:30px;" title="Tab with keep-alive" type="success" />
+    <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
+      <el-tab-pane v-for="item in tabMapOptions" :key="item.key" :label="item.label" :name="item.key">
+        <keep-alive>
+          <tab-pane v-if="activeName==item.key" :type="item.key" @create="showCreatedTimes" />
+        </keep-alive>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
-import permission from '@/directive/permission/index.js' // 权限判断指令
-import checkPermission from '@/utils/permission' // 权限判断函数
-import SwitchRoles from './components/SwitchRoles'
+import TabPane from './components/TabPane'
 
 export default {
-  name: 'DirectivePermission',
-  components: { SwitchRoles },
-  directives: { permission },
+  name: 'Tab',
+  components: { TabPane },
   data() {
     return {
-      key: 1 // 为了能每次切换权限的时候重新初始化指令
+      tabMapOptions: [
+        { label: '温敏传感器', key: 'WM' },
+        { label: '光敏传感器', key: 'GM' },
+        { label: '压敏传感器', key: 'YM' },
+        { label: '气敏传感器', key: 'QM' }
+      ],
+      activeName: 'GM',
+      createdTimes: 0
+    }
+  },
+  watch: {
+    activeName(val) {
+      this.$router.push(`${this.$route.path}?tab=${val}`)
+    }
+  },
+  created() {
+    // init the default selected tab
+    const tab = this.$route.query.tab
+    if (tab) {
+      this.activeName = tab
     }
   },
   methods: {
-    checkPermission,
-    handleRolesChange() {
-      this.key++
+    showCreatedTimes() {
+      this.createdTimes = this.createdTimes + 1
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.app-container {
-  ::v-deep .permission-alert {
-    width: 320px;
-    margin-top: 15px;
-    background-color: #f0f9eb;
-    color: #67c23a;
-    padding: 8px 16px;
-    border-radius: 4px;
-    display: inline-block;
+<style scoped>
+  .tab-container {
+    margin: 30px;
   }
-  ::v-deep .permission-sourceCode {
-    margin-left: 15px;
-  }
-  ::v-deep .permission-tag {
-    background-color: #ecf5ff;
-  }
-}
 </style>
-
