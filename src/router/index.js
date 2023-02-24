@@ -233,6 +233,24 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/cluster',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'ClusterPage',
+    meta: {
+      title: '集群运行情况',
+      icon: 'user'
+    },
+    children: [
+      {
+        path: 'main',
+        component: () => import('@/views/cluster/main'),
+        name: '集群运行情况',
+        meta: { title: '集群运行情况', noCache: true }
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
